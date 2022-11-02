@@ -42,6 +42,7 @@ def GetSfStmtResultSet(pSfConn, pSqlStmt, pFetchAll):
             vSfResultSet = vCursForSqlStmt.fetchone()
     except snowflake.connector.errors.ProgrammingError as e:
         print("Statement error: {0}".format(e.msg))
+        print(pSqlStmt)
     except:
         print("Unexpected error: {0}".format(e.msg))
     finally:
@@ -82,8 +83,15 @@ def GetDatabaseObjectsByType(pSfConn, pSfDatabaseName, pSfObjectType, pSfShemaNa
 # returns:
 # - ddl script as string
 def GetObjectDdl(pSfConn, pSfDatabaseName,pSfSchemaName,pSfOjectType,pSfOjectName,pSfOjectArguments,pCreateOrReplace):
+    if pSfOjectType.lower()=="user function":
+        vSfOjectType="function"
+    elif pSfOjectType.lower()=="file format":
+        vSfOjectType="file_format"
+    else:
+        vSfOjectType=pSfOjectType
+
     # Build dynamically Snowflake get_ddl statement
-    vSqlStmtToGettDdl=f'SELECT GET_DDL(\'{pSfOjectType}\',\'"{pSfDatabaseName}"."{pSfSchemaName}"."{pSfOjectName}"{pSfOjectArguments}\',true)'
+    vSqlStmtToGettDdl=f'SELECT GET_DDL(\'{vSfOjectType}\',\'"{pSfDatabaseName}"."{pSfSchemaName}"."{pSfOjectName}"{pSfOjectArguments}\',true)'
 
     # manage create or replace/ create if not exists statement depending on pCreateOrReplace parameter
     vSqlStmtDdl=GetSfStmtResultSet(pSfConn, vSqlStmtToGettDdl, False)[0]
@@ -153,7 +161,7 @@ def GenerateDbDdlScripts(pRootFolder,pSfConn,pSfDatabaseName,pSchemaObjectTypes,
                 
                 # loop over each object for the given type
                 for vObject in vObjects:
-                    # exclude builtin procedures objects
+                    # exclude built-in procedures objects
                     if (vSchemaObjectType["name"]=="procedures" and vObject[3]!="Y") or vSchemaObjectType["name"]!="procedures": 
                         # get arguments for procedures and user functions
                         if vSchemaObjectType["name"] in ["procedures","user functions"]:
@@ -200,22 +208,21 @@ def Main():
     vSfPassword = vCmdArgs.password
     vSfRole = vCmdArgs.role
     vDatabaseName = vCmdArgs.database
-    vSfShemasFilter = [schema for schema in vCmdArgs.schemas.split(',')]
+    vSfShemasFilter = [] if vCmdArgs.schemas is None else [schema for schema in vCmdArgs.schemas.split(',')] 
     vEnvPatternToReplaceInDdl = vCmdArgs.envPattern
     vEnvPatternReplaceTokenInDdl = vCmdArgs.envReplaceToken
 
     # set object types for which we want to retrieve DDL, dictionnry = [[object type name, order, True: create or replace / False: create if not exists]]
     vObjectTypes = [
         {"name":"file formats","order":"01","createOrReplace":True},
-        {"name":"stages","order":"02","createOrReplace":False},
-        {"name":"sequences","order":"03","createOrReplace":False},
-        {"name":"tables","order":"04","createOrReplace":False},
-        {"name":"views","order":"05","createOrReplace":True},
-        {"name":"pipes","order":"06","createOrReplace":False},
-        {"name":"streams","order":"07","createOrReplace":False},
-        {"name":"user functions","order":"08","createOrReplace":True},
-        {"name":"procedures","order":"09","createOrReplace":True},
-        {"name":"tasks","order":"10","createOrReplace":True}
+        {"name":"sequences","order":"02","createOrReplace":False},
+        {"name":"tables","order":"03","createOrReplace":False},
+        {"name":"views","order":"04","createOrReplace":True},
+        {"name":"pipes","order":"05","createOrReplace":False},
+        {"name":"streams","order":"06","createOrReplace":False},
+        {"name":"user functions","order":"07","createOrReplace":True},
+        {"name":"procedures","order":"08","createOrReplace":True},
+        {"name":"tasks","order":"09","createOrReplace":True}
     ]
 
     # init connection to snowflake
