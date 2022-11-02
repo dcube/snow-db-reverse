@@ -3,7 +3,6 @@
 ## Intro
 This Python command line is used to reverse engineer a Snowflake database with an optional list of schemas in order to extract and save DDLs of all non-infrastructure related objects, i.e:
 - **file formats**: generated as *create or replace* statement
-- **stages**: generated as *create if not exists* statement
 - **sequences**: generated as *create if not exists* statement
 - **tables**: generated as *create if not exists* statement
 - **views**: generated as *create or replace* statement
@@ -24,39 +23,35 @@ Each DDL is saved in a SnowSQL file, according to the following structure of the
       /00_<file format name #1>.sql
       ...
       /00_<file format name #n>.sql
-    /02_stages
-      /00_<stage name #1>.sql
-      ...
-      /00_<stage name #n>.sql
-    /03_sequences
+    /02_sequences
       /00_<sequence name #1>.sql
       ...
       /00_<sequence name #n>.sql
-    /04_tables
+    /03_tables
       /00_<table name #1>.sql
       ...
       /00_<table name #n>.sql
-    /05_views
+    /04_views
       /00_<view name #1>.sql
       ...
       /00_<view name #n>.sql
-    /06_pipes
+    /05_pipes
       /00_<pipe name #1>.sql
       ...
       /00_<pipe name #n>.sql
-    /07_streams
+    /06_streams
       /00_<stream name #1>.sql
       ...
       /00_<stream name #n>.sql
-    /08_user functions
+    /07_user functions
       /00_<user function #1>.sql
       ...
       /00_<user function #n>.sql
-    /09_procedures
+    /08_procedures
       /00_<procedure #1>.sql
       ...
       /00_<procedure #n>.sql
-    /10_tasks
+    /09_tasks
       /00_<task #1>.sql
       ...
       /00_<task #n>.sql
