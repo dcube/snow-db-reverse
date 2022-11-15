@@ -4,6 +4,7 @@ import snowflake.connector
 import argparse
 import logging
 import datetime
+import getpass
 
 class SnowflakeDatabaseSchemasDdlExtractor:
     """
@@ -21,11 +22,18 @@ class SnowflakeDatabaseSchemasDdlExtractor:
     :param pSchemas : list of schemas
     """
     def __init__(self, **pArgs):
+        
+         # enter password if not set
+        if pArgs.get("password")is None or pArgs.get("password")=="":
+            vPassword=getpass.getpass(prompt=f'Enter password for {vCmdArgs.user}@{vCmdArgs.account}:')
+        else:
+            vPassword=pArgs.get("password")
+
         #init snowflake connection
         self.__aSfConn = snowflake.connector.connect(
             account = pArgs.get("account"),
             user = pArgs.get("user"),
-            password = pArgs.get("password"),
+            password = vPassword,
             role = pArgs.get("role")
         )
 
@@ -239,7 +247,7 @@ def CmdArgParser():
     vCmdArgParser.add_argument('-f','--folder', action='store', required=True, help='The folder where you want to store the DDLs scripts')
     vCmdArgParser.add_argument('-a','--account', action='store', required=True, help='Snowflake account to connect to')
     vCmdArgParser.add_argument('-u','--user', action='store', required=True, help='User to connect to Snowflake')
-    vCmdArgParser.add_argument('-p','--password', action='store', required=True, help='Password')
+    vCmdArgParser.add_argument('-p','--password', action='store', required=False, help='Password')
     vCmdArgParser.add_argument('-r','--role', action='store', required=True, help='Role')
     vCmdArgParser.add_argument('-d','--database', action='store', required=True, help='Database to explore')
     vCmdArgParser.add_argument('-s','--schemas', action='store', required=False, help='List of schemas to explore, comma separated values')
@@ -254,7 +262,7 @@ if __name__ == '__main__':
     logging.basicConfig(filename='./snow-db-reverse-ddl.log', level=logging.INFO)
     logging.info(f'Started at {datetime.datetime.now().strftime("%Y-%m-%d, %H:%M:%S")}')
 
-    #parse command arguments
+    # parse command arguments
     vCmdArgs = CmdArgParser()
 
     # init SnowflakeDatabaseSchemasDdlExtractor with connection to snowflake, database and schemas to scan

@@ -92,12 +92,12 @@ snow-db-reverse.py -h
 | :--- | :----: | :--- |
 | -a or --account | True | Snowflake account to connect to |
 | -u or --user | True | User to connect to Snowflake |
-| -p or --password | True | User password |
+| -p or --password | False | User password, if none, password will be asked at runtime |
 | -r or --role | True | User role |
 | -d or --database | True | Database to explore |
 | -s or --schemas | False | List of schemas to explore, comma separated values. Empty for all schemas |
 | -e or --envPattern | False | Environment pattern in object name |
-| -f or --envReplaceToken | False | Replace token for environment, use the SnowSQL CLI notation if you want to benefit of variable substitution |
+| -t or --envReplaceToken | False | Replace token for environment, use the SnowSQL CLI notation if you want to benefit of variable substitution |
 | -f or --folder | True | The folder where you want to store the DDLs scripts |
 
 ### Example
