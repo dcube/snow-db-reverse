@@ -14,12 +14,12 @@ class SnowflakeDatabaseSchemasDdlExtractor:
     """
     Object constructor 
     :param pArgs: key pair value dictionnnary with 
-    :param pSfAccount: Snowflake account  
-    :param pSfUser: User
-    :param pSfPwd: Password
-    :param pSfRole: Role
-    :param pDatabaseName : Database name
-    :param pSchemas : list of schemas
+    - pSfAccount: Snowflake account  
+    - pSfUser: User
+    - pSfPwd: Password
+    - pSfRole: Role
+    - pDatabaseName : Database name
+    - pSchemas : list of schemas
     """
     def __init__(self, **pArgs):
         
