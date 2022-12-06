@@ -83,7 +83,7 @@ For more information about the SnowSQL CLI please refer to [Snowflake official d
 Install Python 3.9.0 or higher. Clone the **snow-db-reverse** repository.
 To get help, you can run the following command:
 ```
-snow-db-reverse.py -h 
+python snow-db-reverse.py -h 
 ```
 
 ### List of arguments
@@ -102,6 +102,6 @@ snow-db-reverse.py -h
 
 ### Example
 ```
-snow_db_reverse_ddl.py -a "xn001.west-europe.azure" -u "myuser" -p "MyStr0ngP@ssw0rd" -r "myrole" -d "SAMPLE_DEV_DB" -s "MYSCHEMA1_SCH,MYSCHEMA2_SCH" -e "_DEV_" -t "_&{env}_" -f "C:\tmp\snowsql\models\SAMPLE_DB"  
+python snow_db_reverse_ddl.py -a "xn001.west-europe.azure" -u "myuser" -p "MyStr0ngP@ssw0rd" -r "myrole" -d "SAMPLE_DEV_DB" -s "MYSCHEMA1_SCH,MYSCHEMA2_SCH" -e "_DEV_" -t "_&{env}_" -f "C:\tmp\snowsql\models\SAMPLE_DB"  
 ```
 
