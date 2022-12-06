@@ -3,6 +3,9 @@
 ## Intro
 This Python command line is used to reverse engineer a Snowflake database with an optional list of schemas in order to extract and save DDLs of all non-infrastructure related objects, i.e:
 - **file formats**: generated as *create or replace* statement
+- **masking policies**: generated as *create or replace* statement
+- **row access policies**: generated as *create or replace* statement
+- **tags**: generated as *create or replace* statement
 - **sequences**: generated as *create if not exists* statement
 - **tables**: generated as *create if not exists* statement
 - **views**: generated as *create or replace* statement
